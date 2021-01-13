@@ -1,0 +1,23 @@
+{
+  "name": "employeetracker.github.io",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Agarc4777/employeeTracker.github.io.git"
+  },
+  "author": "ignacio",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Agarc4777/employeeTracker.github.io/issues"
+  },
+  "homepage": "https://github.com/Agarc4777/employeeTracker.github.io#readme",
+  "dependencies": {
+    "inquirer": "^7.3.3",
+    "mysql": "^2.18.1"
+  }
+}
