@@ -1,6 +1,7 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var util = require("util");
+require("console.table");
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -35,16 +36,12 @@ async function start() {
                 choices: ["Departments", "Roles", "Employees", "Exit"]
             }
         )
-
     if (answer.mainMenu === "Departments") {
         departments();
-
     } else if (answer.mainMenu === "Roles") {
         roles();
-
     } else if (answer.mainMenu === "Employees"){
         employees();
-
     } else {
         connection.end();
 
@@ -53,8 +50,6 @@ async function start() {
 
 // function for departments and
 async function departments() {
-    // var departmentResults = await connection.query("SELECT * FROM schema_db.department");
-    // console.table(departmentResults);
     var answer = await inquirer.prompt
         (
             {
@@ -64,13 +59,9 @@ async function departments() {
                 choices: ["Sales", "Service", "Exit"]
             }
         )
-
-    // 
     if (answer.department === "Sales") {
-        // add functions for Sales
-        
+        sales();
     } else if (answer.department === "Service") {
-        // add functions for Service
         
     } else {
         connection.end();
@@ -81,7 +72,26 @@ async function departments() {
 
 
 // add function for sales
+async function sales() {
+    var answer = await inquirer.prompt
+        (
+            {
+                name: "sales",
+                type: "list",
+                message: "Here is a list of sales employees.",
+                choices: ["", "", "Exit"]
+            }
+        )
 
+    // 
+    if (answer.sales === "Sales") {
+        // add functions for Sales
+
+        
+    } else {
+        connection.end();
+    }
+}
 
 
 
@@ -111,15 +121,13 @@ async function roles() {
         )
 
     // 
-    if (answer.mainMenu === "Technicians") {
+    if (answer.roles === "Technicians") {
         // add functions for 
-    } else if (answer.mainMenu === "Service Advisors") {
+    } else if (answer.roles === "Service Advisors") {
         // add functions for 
-    } else if (answer.mainMenu === "Salesmen"){
+    } else if (answer.roles === "Salesmen"){
         // add function for 
-    } else if (answer.mainMenu === "Managers"){
-        // add function for 
-    }else if (answer.mainMenu === "Show All Employees"){
+    } else if (answer.roles === "Managers"){
         // add function for 
     } else {
             connection.end();
@@ -142,20 +150,16 @@ async function employees() {
     var answer = await inquirer.prompt
         (
             {
-                name: "mainMenu",
+                name: "employees",
                 type: "list",
-                message: "Main Menu",
-                choices: ["", "", "", "Exit"]
+                message: "Showing all employees",
+                choices: ["Exit"]
             }
         )
 
     // based on their answer, either call the bid or the post functions
-    if (answer.mainMenu === "") {
-        // add functions for department
-    } else if (answer.mainMenu === "") {
-        // add functions for roles
-    } else if (answer.mainMenu === ""){
-        // add function for employees.
+    if (answer.employees === "") {
+        // add functions for departmen
     } else {
         connection.end();
     }
