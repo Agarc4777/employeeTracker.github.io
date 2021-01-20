@@ -1,25 +1,21 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var util = require("util");
-require("console.table");
+const { get } = require("http");
+// require("console.table");
 
 var connection = mysql.createConnection({
     host: "localhost",
-
     // port is 3306
     port: 3306,
-
     user: "root",
-
     password: "B055p0w3r!",
     database: "employees_db"
 });
 
 connection.query = util.promisify(connection.query);
-
 connection.connect(function (err) {
     if (err) throw err;
-    
     start();
 });
 
@@ -44,67 +40,110 @@ async function start() {
         employees();
     } else {
         connection.end();
-
     }
 }
 
 // function for departments and
 async function departments() {
+    var departmentRows = await connection.query("SELECT * FROM department");
+    console.log(departmentRows);
+    var choices = [];
+    for (var i = 0; i < departmentRows.length; i++) {
+        choices.push(departmentRows[i].name);
+    }
     var answer = await inquirer.prompt
         (
             {
                 name: "department",
                 type: "list",
                 message: "choose the department you want to look at.",
-                choices: ["Sales", "Service", "Exit"]
+                choices: choices,
             }
         )
-    if (answer.department === "Sales") {
-        sales();
-    } else if (answer.department === "Service") {
-        
-    } else {
-        connection.end();
-    }
+    // if (answer.department === "Sales") {
+    //     sales();
+    // } else if (answer.department === "Service") {
+    //     service();
+    // } else {
+    //     connection.end();
+    // }
+    getDepartment(answer.department);
 }
 // add function for sales employees. will have subcategory of sales director,then sales managers, then sales employees and
 
 
 
 // add function for sales
-async function sales() {
+async function getDepartment(department) {
     var answer = await inquirer.prompt
+    // var department
         (
             {
-                name: "sales",
+                name: "empChoice",
                 type: "list",
-                message: "Here is a list of sales employees.",
-                choices: ["", "", "Exit"]
+                message: "Here are your choices for " + department +" department",
+                choices: ["Show all "+ department +" Employees","Add employee", "Exit"]
             }
         )
-
-    // 
-    if (answer.sales === "Sales") {
+    if (answer.empChoice === "Show all "+ department +" Employees") {
         // add functions for Sales
-
-        
+        showEmpByDep(department);
     } else {
         connection.end();
     }
 }
 
 
+async function showEmpByDep(department) {
+    var departmentRows = await connection.query("SELECT * FROM department");
+    var employeeRows = await connection.query("SELECT * FROM employee")
+}
 
-
-
-
-// add function for service
-
-
-
-
-
-
+async function addEmployee() {    
+    var employeeRows = await connection.query("SELECT * FROM employee");
+    console.log(employeeRows);
+    var empChoices = [];
+    for (var i = 0; i < employeeRows.length; i++) {
+        empChoices.push({
+            name:employeeRows[i].first_name,
+            value:employeeRows[i].id,
+        });
+    }    
+    var roleRows = await connection.query("SELECT * FROM roles");
+    console.log(roleRows);
+    var roleChoices = [];
+    for (var i = 0; i < roleRows.length; i++) {
+        roleChoices.push({
+            name:roleRows[i].title,
+            value:roleRows[i].id,
+        });
+    }
+    var data = await inquirer.prompt
+        (
+            {
+                name: 'firstName',
+                type: 'input',
+                message: 'First Name: '
+            },
+            {
+                name: 'lastName',
+                type: 'input',
+                message: 'Last Name: '
+            },
+            {
+                name: 'empRole',
+                type: 'list',
+                message: 'Role: ',
+                choices: roleChoices
+            },
+            {
+                name: "manager",
+                type: "list",
+                message: "who is the manager of the employee?",
+                choices: empChoices
+            }
+        )
+}
 
 
 
